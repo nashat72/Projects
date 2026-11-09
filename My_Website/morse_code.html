@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Morse Code Application</title>
+
+    <style>
+        /* =====================================
+           1. GENERAL WEBSITE APPEARANCE
+        ===================================== */
+
+        body {
+            font-family: "Bradley Hand", cursive;
+            background-color: tan;
+            color: black;
+            margin: 0;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            background-color: #fff8eb;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 17px;
+        }
+
+        /* =====================================
+           2. NAVIGATION
+        ===================================== */
+
+        .navigation {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .navigation a {
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+
+        /* =====================================
+           3. CONVERSION MODE BUTTONS
+        ===================================== */
+
+        .mode-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 17px;
+            padding: 10px 18px;
+            border: 1px solid #795638;
+            border-radius: 8px;
+            background-color: #ead7b9;
+            color: black;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c8a77e;
+        }
+
+        button.active {
+            background-color: #795638;
+            color: white;
+        }
+
+        /* =====================================
+           4. TEXT INPUT AND OUTPUT
+        ===================================== */
+
+        label {
+            display: block;
+            font-size: 19px;
+            font-weight: bold;
+            margin: 15px 0 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #bba486;
+            border-radius: 8px;
+            background-color: #fffdf8;
+            font-family: Arial, sans-serif;
+            font-size: 17px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: 2px solid #a17b50;
+        }
+
+        #output {
+            background-color: #f1e5d1;
+        }
+
+        /* =====================================
+           5. ACTION BUTTONS
+        ===================================== */
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .convert-button {
+            background-color: #795638;
+            color: white;
+        }
+
+        .convert-button:hover {
+            background-color: #563b25;
+        }
+
+        /* =====================================
+           6. AUDIO SETTINGS
+        ===================================== */
+
+        .audio-settings {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f1e5d1;
+            border-radius: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #795638;
+        }
+
+        /* =====================================
+           7. STATUS MESSAGE
+        ===================================== */
+
+        #status {
+            min-height: 22px;
+            color: #65472c;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        /* =====================================
+           8. MORSE CODE REFERENCE TABLE
+        ===================================== */
+
+        .reference {
+            margin-top: 35px;
+        }
+
+        .reference table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            background-color: #fffdf8;
+        }
+
+        .reference th,
+        .reference td {
+            border: 1px solid #c9b496;
+            padding: 9px;
+            text-align: center;
+        }
+
+        .reference th {
+            background-color: #ead7b9;
+        }
+
+        .reference tr:hover {
+            background-color: #f1e5d1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #65472c;
+        }
+
+        /* =====================================
+           9. MOBILE SCREEN
+        ===================================== */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 18px;
+                margin: 10px auto;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .reference th,
+            .reference td {
+                padding: 6px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =====================================
+         10. APPLICATION TITLE
+    ====================================== -->
+
+    <h1>Morse Code Application</h1>
+
+    <p style="text-align:center;">
+        Convert text into Morse code and Morse code into text.
+    </p>
+
+    <div class="navigation">
+        <a href="/Users/macbookair/Desktop/Coding/HTML_CSS_JavaScript/My_Website/My_Diary.html">Back to main page</a>
+    </div>
+
+
+    <!-- =====================================
+         11. CONVERSION MODE
+    ====================================== -->
+
+    <div class="mode-buttons">
+
+        <button id="encodeMode" class="active">
+            Text → Morse Code
+        </button>
+
+        <button id="decodeMode">
+            Morse Code → Text
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         12. INPUT
+    ====================================== -->
+
+    <label id="inputLabel" for="inputText">
+        Enter your text:
+    </label>
+
+    <textarea
+        id="inputText"
+        placeholder="Type your message here..."
+    ></textarea>
+
+
+    <!-- =====================================
+         13. APPLICATION CONTROLS
+    ====================================== -->
+
+    <div class="action-buttons">
+
+        <button class="convert-button" id="convertButton">
+            Convert
+        </button>
+
+        <button id="playButton">
+            ▶ Play Morse Beeps
+        </button>
+
+        <button id="copyButton">
+            Copy Result
+        </button>
+
+        <button id="clearButton">
+            Clear
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         14. OUTPUT
+    ====================================== -->
+
+    <label for="output">
+        Result:
+    </label>
+
+    <textarea
+        id="output"
+        readonly
+        placeholder="Your result will appear here..."
+    ></textarea>
+
+    <p id="status" role="status" aria-live="polite"></p>
+
+
+    <!-- =====================================
+         15. AUDIO SETTINGS
+    ====================================== -->
+
+    <div class="audio-settings">
+
+        <h2>Audio Settings</h2>
+
+        <label for="speed">
+            Morse Code Speed:
+            <span id="speedValue">15 WPM</span>
+        </label>
+
+        <input
+            type="range"
+            id="speed"
+            min="5"
+            max="30"
+            value="15"
+        >
+
+        <p>
+            Adjust the playback speed between 5 and 30 words per minute.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================
+         16. MORSE CODE REFERENCE
+    ====================================== -->
+
+    <div class="reference">
+
+        <h2>Morse Code Reference</h2>
+
+        <p>
+            The following table shows the Morse code alphabet,
+            numbers and punctuation.
+        </p>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Character</th>
+                    <th>Morse Code</th>
+                    <th>Character</th>
+                    <th>Morse Code</th>
+                </tr>
+            </thead>
+
+            <tbody id="referenceTable">
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- =====================================
+         17. FOOTER
+    ====================================== -->
+
+    <footer>
+
+        <p>
+            My Personal Website | Morse Code Application
+        </p>
+
+    </footer>
+
+</div>
+
+
+<!-- =========================================
+     18. JAVASCRIPT
+========================================= -->
+
+<script>
+
+    /* =====================================
+       A. MORSE CODE DICTIONARY
+    ===================================== */
+
+    const morse_code_dict = {
+
+        "A": ".-",
+        "B": "-...",
+        "C": "-.-.",
+        "D": "-..",
+        "E": ".",
+        "F": "..-.",
+        "G": "--.",
+        "H": "....",
+        "I": "..",
+        "J": ".---",
+        "K": "-.-",
+        "L": ".-..",
+        "M": "--",
+        "N": "-.",
+        "O": "---",
+        "P": ".--.",
+        "Q": "--.-",
+        "R": ".-.",
+        "S": "...",
+        "T": "-",
+        "U": "..-",
+        "V": "...-",
+        "W": ".--",
+        "X": "-..-",
+        "Y": "-.--",
+        "Z": "--..",
+
+        "1": ".----",
+        "2": "..---",
+        "3": "...--",
+        "4": "....-",
+        "5": ".....",
+        "6": "-....",
+        "7": "--...",
+        "8": "---..",
+        "9": "----.",
+        "0": "-----",
+
+        ",": "--..--",
+        ".": ".-.-.-",
+        "?": "..--..",
+        "/": "-..-.",
+        "-": "-....-",
+        "(": "-.--.",
+        ")": "-.--.-"
+
+    };
+
+
+    /* =====================================
+       B. REVERSE THE DICTIONARY
+       Morse Code → Character
+    ===================================== */
+
+    const reversed_morse_code_dict = {};
+
+    for (const character in morse_code_dict) {
+
+        const code = morse_code_dict[character];
+
+        reversed_morse_code_dict[code] = character;
+
+    }
+
+
+    /* =====================================
+       C. TEXT TO MORSE CODE
+    ===================================== */
+
+    function text_to_morse(text) {
+
+        text = text.toUpperCase();
+
+        let morse_code = "";
+
+        const words = text.trim().split(/\s+/);
+
+        for (let i = 0; i < words.length; i++) {
+
+            let letters = [];
+
+            for (const character of words[i]) {
+
+                if (morse_code_dict[character]) {
+
+                    letters.push(morse_code_dict[character]);
+
+                }
+
+            }
+
+            morse_code += letters.join(" ");
+
+            if (i < words.length - 1) {
+
+                morse_code += " / ";
+
+            }
+
+        }
+
+        return morse_code;
+
+    }
+
+
+    /* =====================================
+       D. MORSE CODE TO TEXT
+    ===================================== */
+
+    function morse_to_text(morse) {
+
+        let text = "";
+
+        // Split words using /
+        const words = morse.trim().split(/\s*\/\s*/);
+
+        for (let i = 0; i < words.length; i++) {
+
+            const letters = words[i].trim().split(/\s+/);
+
+            for (const code of letters) {
+
+                if (reversed_morse_code_dict[code]) {
+
+                    text += reversed_morse_code_dict[code];
+
+                } else if (code) {
+
+                    text += "?";
+
+                }
+
+            }
+
+            if (i < words.length - 1) {
+
+                text += " ";
+
+            }
+
+        }
+
+        return text;
+
+    }
+
+
+    /* =====================================
+       E. GET HTML ELEMENTS
+    ===================================== */
+
+    const inputText = document.getElementById("inputText");
+
+    const output = document.getElementById("output");
+
+    const status = document.getElementById("status");
+
+    const inputLabel = document.getElementById("inputLabel");
+
+    const encodeMode = document.getElementById("encodeMode");
+
+    const decodeMode = document.getElementById("decodeMode");
+
+    const speed = document.getElementById("speed");
+
+    let currentMode = "encode";
+
+
+    /* =====================================
+       F. CHANGE CONVERSION MODE
+    ===================================== */
+
+    function setMode(mode) {
+
+        currentMode = mode;
+
+        output.value = "";
+
+        status.textContent = "";
+
+        if (mode === "encode") {
+
+            encodeMode.classList.add("active");
+
+            decodeMode.classList.remove("active");
+
+            inputLabel.textContent = "Enter your text:";
+
+            inputText.placeholder = "Type your message here...";
+
+        } else {
+
+            decodeMode.classList.add("active");
+
+            encodeMode.classList.remove("active");
+
+            inputLabel.textContent = "Enter Morse code:";
+
+            inputText.placeholder =
+                "Example: .... . .-.. .-.. --- / .-- --- .-. .-.. -..";
+
+        }
+
+    }
+
+
+    /* =====================================
+       G. CONVERT INPUT
+    ===================================== */
+
+    function convert() {
+
+        const input = inputText.value.trim();
+
+        if (input === "") {
+
+            status.textContent = "Please enter something first.";
+
+            output.value = "";
+
+            return;
+
+        }
+
+        if (currentMode === "encode") {
+
+            output.value = text_to_morse(input);
+
+        } else {
+
+            output.value = morse_to_text(input);
+
+        }
+
+        status.textContent = "Conversion completed successfully.";
+
+    }
+
+
+    /* =====================================
+       H. MORSE CODE AUDIO
+    ===================================== */
+
+    function play_morse() {
+
+        // If text mode, use the converted output.
+        // If decode mode, play the Morse entered by the user.
+
+        let morse;
+
+        if (currentMode === "encode") {
+
+            if (!output.value) {
+
+                convert();
+
+            }
+
+            morse = output.value;
+
+        } else {
+
+            morse = inputText.value.trim();
+
+        }
+
+        if (!morse) {
+
+            status.textContent = "Please enter Morse code first.";
+
+            return;
+
+        }
+
+        const AudioContext =
+            window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContext) {
+
+            status.textContent = "Audio is not supported by this browser.";
+
+            return;
+
+        }
+
+        const audio = new AudioContext();
+
+        const unit = 1.2 / Number(speed.value);
+
+        const frequency = 650;
+
+        let time = audio.currentTime + 0.05;
+
+        const words = morse.trim().split(/\s*\/\s*/);
+
+        function make_beep(duration) {
+
+            const oscillator = audio.createOscillator();
+
+            const gain = audio.createGain();
+
+            oscillator.type = "sine";
+
+            oscillator.frequency.value = frequency;
+
+            gain.gain.setValueAtTime(0.0001, time);
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.18,
+                time + 0.005
+            );
+
+            gain.gain.setValueAtTime(
+                0.18,
+                time + duration - 0.005
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                time + duration
+            );
+
+            oscillator.connect(gain);
+
+            gain.connect(audio.destination);
+
+            oscillator.start(time);
+
+            oscillator.stop(time + duration);
+
+        }
+
+
+        // Process every word
+
+        words.forEach((word, wordIndex) => {
+
+            const letters = word.trim().split(/\s+/).filter(Boolean);
+
+            letters.forEach((letter, letterIndex) => {
+
+                const symbols = letter.split("");
+
+                symbols.forEach((symbol, symbolIndex) => {
+
+                    if (symbol === ".") {
+
+                        make_beep(unit);
+
+                        time += unit;
+
+                    } else if (symbol === "-") {
+
+                        make_beep(3 * unit);
+
+                        time += 3 * unit;
+
+                    }
+
+                    // Gap between dots and dashes:
+                    // 1 time unit
+
+                    if (symbolIndex < symbols.length - 1) {
+
+                        time += unit;
+
+                    }
+
+                });
+
+
+                // Gap between letters:
+                // 3 time units total.
+                // One unit was already added after the final beep.
+
+                if (letterIndex < letters.length - 1) {
+
+                    time += 2 * unit;
+
+                }
+
+            });
+
+
+            // Gap between words:
+            // 7 time units total.
+            // One unit was already added after the final beep.
+
+            if (wordIndex < words.length - 1) {
+
+                time += 6 * unit;
+
+            }
+
+        });
+
+
+        status.textContent = "Playing Morse code...";
+
+        const playbackTime = Math.max(
+            0,
+            (time - audio.currentTime) * 1000
+        );
+
+        setTimeout(() => {
+
+            status.textContent = "Playback finished.";
+
+            audio.close();
+
+        }, playbackTime + 100);
+
+    }
+
+
+    /* =====================================
+       I. COPY RESULT
+    ===================================== */
+
+    async function copy_result() {
+
+        if (!output.value) {
+
+            status.textContent = "There is nothing to copy.";
+
+            return;
+
+        }
+
+        try {
+
+            await navigator.clipboard.writeText(output.value);
+
+            status.textContent = "Result copied successfully.";
+
+        } catch (error) {
+
+            output.select();
+
+            document.execCommand("copy");
+
+            status.textContent = "Result copied.";
+
+        }
+
+    }
+
+
+    /* =====================================
+       J. CLEAR INPUT AND OUTPUT
+    ===================================== */
+
+    function clear_fields() {
+
+        inputText.value = "";
+
+        output.value = "";
+
+        status.textContent = "";
+
+        inputText.focus();
+
+    }
+
+
+    /* =====================================
+       K. AUDIO SPEED DISPLAY
+    ===================================== */
+
+    speed.addEventListener("input", function() {
+
+        document.getElementById("speedValue").textContent =
+            speed.value + " WPM";
+
+    });
+
+
+    /* =====================================
+       L. DISPLAY MORSE REFERENCE TABLE
+    ===================================== */
+
+    function create_reference_table() {
+
+        const entries = Object.entries(morse_code_dict);
+
+        const table = document.getElementById("referenceTable");
+
+        for (let i = 0; i < Math.ceil(entries.length / 2); i++) {
+
+            const row = document.createElement("tr");
+
+            for (let j = 0; j < 2; j++) {
+
+                const entry = entries[i + j * Math.ceil(entries.length / 2)];
+
+                if (entry) {
+
+                    const characterCell = document.createElement("td");
+
+                    const morseCell = document.createElement("td");
+
+                    characterCell.textContent = entry[0];
+
+                    morseCell.textContent = entry[1];
+
+                    row.appendChild(characterCell);
+
+                    row.appendChild(morseCell);
+
+                } else {
+
+                    row.appendChild(document.createElement("td"));
+
+                    row.appendChild(document.createElement("td"));
+
+                }
+
+            }
+
+            table.appendChild(row);
+
+        }
+
+    }
+
+
+    /* =====================================
+       M. CONNECT BUTTONS TO FUNCTIONS
+    ===================================== */
+
+    encodeMode.addEventListener("click", function() {
+
+        setMode("encode");
+
+    });
+
+
+    decodeMode.addEventListener("click", function() {
+
+        setMode("decode");
+
+    });
+
+
+    document.getElementById("convertButton")
+        .addEventListener("click", convert);
+
+
+    document.getElementById("playButton")
+        .addEventListener("click", play_morse);
+
+
+    document.getElementById("copyButton")
+        .addEventListener("click", copy_result);
+
+
+    document.getElementById("clearButton")
+        .addEventListener("click", clear_fields);
+
+
+    // Keyboard shortcut: Command + Enter on Mac
+    // or Ctrl + Enter on Windows.
+
+    inputText.addEventListener("keydown", function(event) {
+
+        if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+
+            convert();
+
+        }
+
+    });
+
+
+    /* =====================================
+       N. START THE APPLICATION
+    ===================================== */
+
+    create_reference_table();
+
+</script>
+
+</body>
+</html>
